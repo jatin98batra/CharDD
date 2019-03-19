@@ -1,0 +1,194 @@
+#! /bin/bash
+
+	
+
+buildDriver()
+{
+	
+	if ( make )
+	then
+		echo
+		echo "Build Successful"
+		echo
+	else
+		echo 
+		echo "Build Unsuccessful" 
+		echo
+	fi
+
+
+
+}
+
+
+
+showDriver()
+{
+		echo
+		lsmod | head
+		read
+		echo 
+		dmesg | tail
+		read
+		echo
+		cat /proc/devices
+		read
+		echo
+
+}
+
+
+buildApp()
+{
+	
+	echo "Checking In"
+	ci ./App/*.c 
+
+	#CheckOut will be Done int the Makefile Itself
+	if ( make -C ./App)
+	then 
+		echo 
+		echo "App Built Successfully"
+		echo 
+		mv ./App/app .
+	else
+		echo 
+		echo "Oops ! "
+		echo 
+
+	fi	
+
+	
+
+}
+
+
+
+
+	echo "Checking in.."
+	ci *.c
+	ci *.h
+	echo "Checking out.."
+	co *.c,v 
+	co *.h,v
+
+	echo
+	read -p "Do you want to build driver?(y/n)" choice
+	if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+
+	then 
+		echo
+		buildDriver;
+
+	else
+		echo
+		echo "No Problem"
+		echo
+	fi
+
+
+	
+	read -p "Do you want to Insert driver?(y/n)" choice
+	if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+
+	then 
+		echo
+		if ( insmod ./modules/CharDD.ko  noDev=10 )
+		then
+			
+			showDriver;
+			
+			read -p "Enter the major number" majorNo
+			read -p "Enter the minor number" minorNo
+
+			mknod myDev c $majorNo $minorNo
+
+			echo
+			echo "Do you want to build app?"
+			read choice
+			
+			if  [ $choice = 'y' ] || [ $choice = 'Y' ] 
+			then
+				buildApp;
+
+			else
+				echo
+				echo "No Problem"
+				echo
+
+
+			fi
+			
+			read -p "Do you want to run the app?" choice
+			if  [ $choice = 'y' ] || [ $choice = 'Y' ] 
+			then
+				rm -f ./App/*.o
+				./app
+
+			else
+				echo
+				echo "No Problem"
+				echo
+
+
+			fi
+
+
+				
+			
+
+			
+
+			read -p "Do you want to Remove driver?(y/n)" choice
+		
+			if  [ $choice = 'y' ] || [ $choice = 'Y' ] 
+			then 
+				
+				unlink myDev
+				rmmod CharDD
+				showDriver;
+			else
+				echo
+				echo "No Problem"
+				echo
+			fi
+			
+
+		else
+			echo 
+			echo "Failed"
+			echo
+
+		fi
+
+
+	else
+		echo
+		echo "No Problem"
+		echo
+	fi
+	
+	
+	read -p "Do you want to edit further?(y/n)" choice
+	if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+	then
+		co -l *.c,v
+		co -l *.h,v
+	else
+		echo
+		echo "Ok no problem"
+		echo
+	fi
+
+
+
+
+	
+
+
+
+	
+
+
+	
+
