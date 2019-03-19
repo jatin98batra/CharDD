@@ -181,14 +181,69 @@ buildApp()
 	fi
 
 
+	
 
 
+	read -p "Do you want to push everthing to git-hub?(y/n)" choice
+	if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+	then
+				git status
+				read -p "Do you want add everything?(y/n)" choice
+				if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+				then 
+					git add *
+					read -p "Do you want commit the changes(y/n)?" choice
+					if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+					then	
+						for file in $( ls *.c ) $( ls *.h) Makefile testDriver
+						do
+							git commit $file
+						done
+						read -p "Push ?" choice
+						
+						if [ $choice = 'y' ] || [ $choice = 'Y' ] 
+						then
+							git push
+						else
+							echo
+							echo "Ok then do it yourself"
+							echo
+
+						fi
+
+
+					else
+						echo
+						echo "Ok then do it yourself"
+						echo
+					fi
+				else
+					echo
+					echo "Ok then do it yourself"
+					echo
+
+				fi
+
+
+
+
+	else
+		echo
+		echo "Ok no problem"
+		echo
+	fi
+
+
+
+	
 	
 
 
 
 	
 
+
+	
 
 	
 
