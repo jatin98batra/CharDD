@@ -86,7 +86,9 @@ extern int noDev;
 /*******************************************Device Opertions********************************************************/
 int openDev(struct inode *, struct file *);
 int releaseDev(struct inode *, struct file *);
+int trimDev(void);
 ssize_t write (struct file *, const char __user *, size_t, loff_t *);
+
 
 
 
