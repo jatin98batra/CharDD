@@ -1,7 +1,8 @@
 struct file_operations fops={
 
 open:		openDev,
-release:	releaseDev
-
+release:	releaseDev,
+read:		readDev,
+write:		writeDev
 
 };
