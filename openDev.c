@@ -17,8 +17,12 @@ int openDev(struct inode * inodep, struct file * filp)
 	printk(KERN_INFO "ldev = %p",ldev);	
 #endif 
 
-			
+	filp->private_data=(void*)ldev;// saving for further usage
+	if(((filp->f_flags) & O_ACCMODE) == O_WRONLY)
+	{
+		trimDev();
 	
+	}
 		
 
 	printk(KERN_INFO "%s:End\n",__func__);
