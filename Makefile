@@ -3,7 +3,7 @@ INSTALL_DIR=modules
 ifneq (${KERNELRELEASE},)
 	obj-m := CharDD.o
 
-CharDD-objs := start.o ending.o openDev.o releaseDev.o
+CharDD-objs := start.o ending.o openDev.o releaseDev.o trimDev.o
 
 else
 	KERNELDIR ?= /lib/modules/$(shell uname -r)/build
