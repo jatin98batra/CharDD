@@ -45,7 +45,7 @@ static int __init start(void)
 	}
 	
 	#ifdef DEBUG
-	printk(KERN_INFO "Space Allocated: %p of length %ld\n for %d devices with the base address:%p ",devParam,sizeof(Dev),noDev,devParam);	
+	printk(KERN_INFO "Space Allocated: %p of length %ld for %d \n",devParam,sizeof(Dev),noDev);	
 	#endif
 
 	for(i=MINORSTART;i<noDev;i++)
