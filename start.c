@@ -45,7 +45,7 @@ static int __init start(void)
 	}
 	
 	#ifdef DEBUG
-	printk(KERN_INFO "Space Allocated: %p of length %ld\n for %d devices",devParam,sizeof(Dev),noDev);	
+	printk(KERN_INFO "Space Allocated: %p of length %ld\n for %d devices with the base address:%p ",devParam,sizeof(Dev),noDev,devParam);	
 	#endif
 
 	for(i=MINORSTART;i<noDev;i++)
@@ -74,7 +74,7 @@ static int __init start(void)
 		}
 	}
 
-	devNo=MKDEV(majorNo,0); //Reset 
+	devNo=MKDEV(majorNo,0); //Reset : because the unregistering requires the first devNo and the count of devices afterwards this devNo
 	
 
 	for(i=MINORSTART;i<noDev;i++)
