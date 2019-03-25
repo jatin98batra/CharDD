@@ -38,11 +38,11 @@ MODULE_DESCRIPTION("Character Device Driver");
 /*******************************************Some Device Specific************************************************************/
 
 #ifndef NOREG
-#define NOREG 4
+#define NOREG 8
 #endif
 
 #ifndef REGSIZE
-#define REGSIZE 32
+#define REGSIZE 4
 #endif
 
 #ifndef DEVSIZE
@@ -52,7 +52,7 @@ MODULE_DESCRIPTION("Character Device Driver");
 /**********************************************Structures***********************************************************/
 
 
-typedef struct
+typedef struct Qset
 {
 	struct Qset *next;
 	void ** data;
@@ -62,7 +62,7 @@ typedef struct
 
 
 
-typedef struct
+typedef struct Dev
 {
 	
 	struct Qset * ptr;  /*Though "Qset" was enough and there was no need of 'struct' keyword but this makes code more readable*/
@@ -87,8 +87,10 @@ extern int noDev;
 int openDev(struct inode *, struct file *);
 int releaseDev(struct inode *, struct file *);
 int trimDev(void);
+struct Qset* createScull(int,struct Dev*);
 ssize_t readDev (struct file *, char __user *, size_t, loff_t *);
 ssize_t writeDev (struct file *, const char __user *, size_t, loff_t *);
+
 
 
 
