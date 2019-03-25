@@ -13,6 +13,7 @@ struct Qset* createScull(int size, struct Dev* ldev)
 	int noItems;
 	struct Qset *temp,*first,*last;
 	int neededRegs;
+	int i=0;
 	first=last=temp=NULL;
 	printk(KERN_INFO "%s:Begin\n",__func__);
 
@@ -87,7 +88,22 @@ struct Qset* createScull(int size, struct Dev* ldev)
 				printk(KERN_ERR "Kmalloc allocation failed\n");
 				#endif
 				return 0;
-			}	
+			}
+			
+			for(i=0;i<neededRegs;i++)
+			{
+				*((last->data)+i)=kmalloc(sizeof(char)*ldev->regSize,GFP_KERNEL);
+				if(!(*((last->data)+i)))
+				{
+				#ifdef DEBUG
+				printk(KERN_ERR "Kmalloc allocation failed\n");
+				#endif
+				return 0;
+				}
+			
+			
+			}
+
 		}
 			
 		else
@@ -100,6 +116,20 @@ struct Qset* createScull(int size, struct Dev* ldev)
 				#endif
 				return 0;
 			}	
+			for(i=0;i<ldev->noReg;i++)
+			{
+				*((last->data)+i)=kmalloc(sizeof(char)*ldev->regSize,GFP_KERNEL);
+				if(!(*((last->data)+i)))
+				{
+				#ifdef DEBUG
+				printk(KERN_ERR "Kmalloc allocation failed\n");
+				#endif
+				return 0;
+				}
+			
+			
+			}
+
 			neededRegs=neededRegs-ldev->noReg;
 		}
 
