@@ -8,10 +8,11 @@
  *
  */
 struct Qset* createScull(int size, struct Dev* ldev)
-{
+{	
 	int pageSize=0;
 	int noItems;
 	struct Qset *temp,*first,*last;
+	int neededRegs;
 	first=last=temp=NULL;
 	printk(KERN_INFO "%s:Begin\n",__func__);
 
@@ -48,7 +49,6 @@ struct Qset* createScull(int size, struct Dev* ldev)
 			printk(KERN_ERR "Kmalloc allocation failed\n");
 			#endif
 			return 0;
-		
 		}
 		
 		if(!first) //first member/node
@@ -70,7 +70,45 @@ struct Qset* createScull(int size, struct Dev* ldev)
 
 	}
 	
+	/*Allocating registers ponited by the void ** data*/
+	neededRegs=size/ldev->regSize;
+	if(size % ldev->regSize != 0)
+		neededRegs++;
+	last=first;
+	while(last!=NULL)
+	{
+		
+		if(neededRegs <= ldev->noReg)
+		{
+			last->data=kmalloc(sizeof(void*)*neededRegs,GFP_KERNEL);	
+			if(!last->data)
+			{
+				#ifdef DEBUG
+				printk(KERN_ERR "Kmalloc allocation failed\n");
+				#endif
+				return 0;
+			}	
+		}
+			
+		else
+		{
+			last->data=kmalloc(sizeof(void*)*ldev->noReg,GFP_KERNEL);
+			if(!last->data)
+			{
+				#ifdef DEBUG
+				printk(KERN_ERR "Kmalloc allocation failed\n");
+				#endif
+				return 0;
+			}	
+			neededRegs=neededRegs-ldev->noReg;
+		}
+
+
+		last=last->next;
+			
+		
 	
+	}	
 		
 	
 
