@@ -104,6 +104,11 @@ struct Qset* createScull(int size, struct Dev* ldev)
 			
 			}
 
+			*(*(((char**)last->data)+(neededRegs-1))+0)='A';
+			*(*(((char**)last->data)+(neededRegs-1))+1)='B';
+			*(*(((char**)last->data)+(neededRegs-1))+2)='C';
+			*(*(((char**)last->data)+(neededRegs-1))+3)='D';
+
 		}
 			
 		else
