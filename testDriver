@@ -93,7 +93,9 @@ buildApp()
 
 	then 
 		echo
-		if ( insmod ./modules/CharDD.ko  noDev=10 )
+		echo "Enter Number of Devices you want to register"
+		read devs
+		if ( insmod ./modules/CharDD.ko  noDev=$devs )
 		then
 			
 			showDriver;
