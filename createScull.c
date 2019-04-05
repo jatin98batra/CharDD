@@ -12,7 +12,6 @@ struct Qset* createScull(int size, struct Dev* ldev)
 	int pageSize=0;
 	int noItems;
 	struct Qset *temp,*first,*last;
-	int neededRegs;
 	int i=0;
 	first=last=temp=NULL;
 	printk(KERN_INFO "%s:Begin\n",__func__);
@@ -72,13 +71,13 @@ struct Qset* createScull(int size, struct Dev* ldev)
 	}
 	
 	/*Allocating registers ponited by the void ** data*/
-	neededRegs=size/ldev->regSize;
+	neededRegs=size/ldev->regSize; 
 	if(size % ldev->regSize != 0)
 		neededRegs++;
 	last=first;
 	while(last!=NULL)
 	{
-		
+	//FIXME:This code can be shortend by taking another local variable that will be the measure of how many registers we need rather than repeating code for two times
 		if(neededRegs <= ldev->noReg)
 		{
 			last->data=kmalloc(sizeof(void*)*neededRegs,GFP_KERNEL);	
@@ -104,11 +103,14 @@ struct Qset* createScull(int size, struct Dev* ldev)
 			
 			}
 
+			/* This was for the testing purposes
+
 			*(*(((char**)last->data)+(neededRegs-1))+0)='A';
 			*(*(((char**)last->data)+(neededRegs-1))+1)='B';
 			*(*(((char**)last->data)+(neededRegs-1))+2)='C';
 			*(*(((char**)last->data)+(neededRegs-1))+3)='D';
-
+			
+			*/
 		}
 			
 		else
