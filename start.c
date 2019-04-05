@@ -7,6 +7,7 @@
 dev_t devNo;
 int majorNo=MAJORNO;
 int minorNo=MINORNO;
+int neededRegs;
 Dev * devParam;
 /*Parameter Defaults and Module parameters*/
 int noDev=NODEV;
