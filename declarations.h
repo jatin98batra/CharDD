@@ -82,6 +82,7 @@ extern int majorNo;
 extern int minorNo;
 extern Dev * devParam;
 extern int noDev;
+extern int neededRegs;
 
 /*******************************************Device Opertions********************************************************/
 int openDev(struct inode *, struct file *);
