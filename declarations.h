@@ -84,6 +84,7 @@ extern int minorNo;
 extern Dev * devParam;
 extern int noDev;
 extern int neededRegs;
+extern struct Qset *startQset;
 //////Device Specific//////
 extern int noReg;
 extern int regSize;
