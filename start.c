@@ -8,7 +8,12 @@ dev_t devNo;
 int majorNo=MAJORNO;
 int minorNo=MINORNO;
 int neededRegs;
+int noReg;
+int regSize;
+int devSize;
+int dataSize;
 Dev * devParam;
+
 /*Parameter Defaults and Module parameters*/
 int noDev=NODEV;
 module_param(noDev,int,S_IRUGO);
