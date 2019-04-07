@@ -13,6 +13,7 @@ int regSize;
 int devSize;
 int dataSize;
 Dev * devParam;
+struct Qset *startQset;
 
 /*Parameter Defaults and Module parameters*/
 int noDev=NODEV;
