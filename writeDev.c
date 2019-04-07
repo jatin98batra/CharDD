@@ -2,12 +2,10 @@
 #include"declarations.h"
 ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t * pointer)
 {
-	struct Dev * ldev;
-	struct Qset * start; 
+	struct Dev *ldev;
+	struct Qset *start,*temp;	
 	size_t actualSize;
-	char *kernBuf;
-	int ret;
-	char *string1,*string2;
+	int nocsw,noctw,nocnw,i;
 	ldev=(Dev*)fl->private_data;
 
 	printk(KERN_INFO "%s:Begin\n",__func__);
@@ -26,29 +24,63 @@ ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t
 	start=createScull(actualSize,ldev);
 	
 
-	string1=(char*)kmalloc(10,GFP_KERNEL);
-	string2=(char*)kmalloc(10,GFP_KERNEL);
-	copy_from_user(string1,buf,9);
-	copy_from_user(string2,buf+9,9);
-	string1[9]='\0';
-	string2[9]='\0';
-	printk(KERN_INFO"string1: %s ",string1);
-	printk(KERN_INFO"string2: %s ",string2);
 	
+	/*	
+	 *	Number of characters successfully written		nocsw
+	 *	Number Of Characters Not Written 			nocnw
+	 *	Number Of Characters To be Written			noctw
+	 */
 	
-	/*noctw=actualSize;
 	temp=start;
+	nocsw=0;
 	i=0;
-	while()
-	{
-		nocnw=copy_from_user((*((temp->data)+i)),buf,ldev->regSize);
-		noctw=noctw-ldev->regSize+nocnw;
-		i++; //FIXME: how to move the file postition
-	}*/
 
+	while(actualSize!=0)
+	{
+		if(actualSize>ldev->regSize)
+		{
+			noctw=ldev->regSize;
+		}
+		else
+			noctw=actualSize;
+
+#ifdef DEBUG
+			printk(KERN_INFO "No of characters to be written: %d \n",noctw);
+#endif
 	
+		/*copy the data from the offset, namely nocsw*/
+		nocnw=copy_from_user(*(temp->data+i),buf+nocsw,noctw);
+		if(!nocnw)
+		{
+#ifdef DEBUG
+			printk(KERN_INFO "Written Successfully %d bytes till now..\n",nocsw);
+			printk(KERN_INFO "Written Successfully %d bytes..\n",noctw);
+#endif
+		}
+		else
+#ifdef DEBUG
+			printk(KERN_ERR "PartialWrite..\n");
+#endif
+	
+
+		/*update the postion*/
+		nocsw=nocsw+noctw-nocnw;
+		/*change the postion*/
+		actualSize=actualSize-noctw+nocnw;
+		/*update the Device Specific paramater and also the Extern Variable*/
+		ldev->dataSize=nocsw;
+		dataSize=nocsw; 
+		i++; //Next Register
+		if(i > ldev->noReg) //next Qset
+		{ 
+			temp=temp->next;
+			i=0;
 		
+		}
+
+	}	
 	
+
 	
 	
 		
