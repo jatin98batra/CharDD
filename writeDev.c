@@ -3,7 +3,7 @@
 ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t * pointer)
 {
 	struct Dev *ldev;
-	struct Qset *start,*temp;	
+	struct Qset *temp;	
 	size_t actualSize;
 	int nocsw,noctw,nocnw,i;
 	ldev=(Dev*)fl->private_data;
@@ -21,7 +21,7 @@ ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t
 		actualSize=size;
 
 	printk(KERN_INFO "The size we are passing to the createScull is:%ld\n",actualSize);
-	start=createScull(actualSize,ldev);
+	startQset=createScull(actualSize,ldev);//extern variable
 	
 
 	
@@ -31,7 +31,7 @@ ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t
 	 *	Number Of Characters To be Written			noctw
 	 */
 	
-	temp=start;
+	temp=startQset;
 	nocsw=0;
 	i=0;
 
@@ -87,5 +87,5 @@ ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t
 
 	printk(KERN_INFO "%s:End\n",__func__);
 
-return 0;
+return nocsw;
 }
