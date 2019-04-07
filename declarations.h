@@ -70,6 +70,7 @@ typedef struct Dev
 	int noReg;
 	int regSize;
 	int devSize;
+	int dataSize;
 
 
 
@@ -83,6 +84,12 @@ extern int minorNo;
 extern Dev * devParam;
 extern int noDev;
 extern int neededRegs;
+//////Device Specific//////
+extern int noReg;
+extern int regSize;
+extern int devSize;
+extern int dataSize;
+
 
 /*******************************************Device Opertions********************************************************/
 int openDev(struct inode *, struct file *);
