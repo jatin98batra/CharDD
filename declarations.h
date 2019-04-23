@@ -49,6 +49,10 @@ MODULE_DESCRIPTION("Character Device Driver");
 #define DEVSIZE 1024
 #endif
 
+#ifndef DATASIZE
+#define DATASIZE 0
+#endif
+
 /**********************************************Structures***********************************************************/
 
 
@@ -95,7 +99,7 @@ extern int dataSize;
 /*******************************************Device Opertions********************************************************/
 int openDev(struct inode *, struct file *);
 int releaseDev(struct inode *, struct file *);
-int trimDev(void);
+int trimDev(struct Dev*);
 struct Qset* createScull(int,struct Dev*);
 ssize_t readDev (struct file *, char __user *, size_t, loff_t *);
 ssize_t writeDev (struct file *, const char __user *, size_t, loff_t *);
