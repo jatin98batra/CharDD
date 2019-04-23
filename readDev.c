@@ -10,7 +10,7 @@ ssize_t readDev (struct file *filp, char __user *buf, size_t size, loff_t * ptr 
 	printk(KERN_INFO "%s:Begin\n",__func__);
 	
 	ldev=filp->private_data;
-	temp=startQset;
+	temp=ldev->ptr;
 	if(!temp)
 	{
 #ifdef DEBUG
