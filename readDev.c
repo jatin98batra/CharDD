@@ -52,7 +52,7 @@ ssize_t readDev (struct file *filp, char __user *buf, size_t size, loff_t * ptr 
 		ldev->dataSize-=noctr;
 		dataSize-=noctr;
 		i++;
-		if(i > ldev->noReg)
+		if(i >= ldev->noReg)
 		{
 			temp=temp->next;
 			i=0;
