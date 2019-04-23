@@ -50,7 +50,7 @@ static int __init start(void)
 		return -1;
 	
 	}
-	
+	devParam->ptr=NULL; //START = NULL	
 	#ifdef DEBUG
 	printk(KERN_INFO "Space Allocated: %p of length %ld for %d \n",devParam,sizeof(Dev),noDev);	
 	#endif
@@ -61,6 +61,7 @@ static int __init start(void)
 		(devParam+i)->noReg=NOREG;
 		(devParam+i)->regSize=REGSIZE;
 		(devParam+i)->devSize=DEVSIZE;
+		(devParam+i)->dataSize=DATASIZE;
 		
 		/*Character Device Initialization And Registry in the Device Table*/
 		cdev_init(&(devParam+i)->c_dev,&fops); //Right now We are keeping fops Same for each device
