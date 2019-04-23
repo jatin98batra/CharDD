@@ -72,7 +72,7 @@ ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t
 		ldev->dataSize=nocsw;
 		dataSize=nocsw; 
 		i++; //Next Register
-		if(i > ldev->noReg) //next Qset
+		if(i >= ldev->noReg) //next Qset
 		{ 
 			temp=temp->next;
 			i=0;
