@@ -12,6 +12,7 @@ struct Qset* createScull(int size, struct Dev* ldev)
 	int pageSize=0;
 	int noItems;
 	struct Qset *temp,*first,*last;
+	int allocatingRegs=0;
 	int i=0;
 	first=last=temp=NULL;
 	printk(KERN_INFO "%s:Begin\n",__func__);
@@ -78,74 +79,39 @@ struct Qset* createScull(int size, struct Dev* ldev)
 	while(last!=NULL)
 	{
 	//FIXME:This code can be shortend by taking another local variable that will be the measure of how many registers we need rather than repeating code for two times
+			
+		last->data=kmalloc(sizeof(void*)*ldev->noReg,GFP_KERNEL); //creates space for 8 registers
+		if(!last->data)
+		{
+			#ifdef DEBUG
+			printk(KERN_ERR "Kmalloc allocation failed\n");
+			#endif
+			return 0;
+		}	
+
+		for(i=0;i<ldev->noReg;i++)
+		memset(last->data+i,0,sizeof(void*));
+
 		if(neededRegs <= ldev->noReg)
-		{
-			last->data=kmalloc(sizeof(void*)*neededRegs,GFP_KERNEL);	
-			if(!last->data)
-			{
-				#ifdef DEBUG
-				printk(KERN_ERR "Kmalloc allocation failed\n");
-				#endif
-				return 0;
-			}
-			
-			for(i=0;i<neededRegs;i++)
-			{
-				*((last->data)+i)=kmalloc(sizeof(char)*ldev->regSize,GFP_KERNEL);
-				if(!(*((last->data)+i)))
-				{
-				#ifdef DEBUG
-				printk(KERN_ERR "Kmalloc allocation failed\n");
-				#endif
-				return 0;
-				}
-			
-			
-			}
-
-			/* This was for the testing purposes
-
-			*(*(((char**)last->data)+(neededRegs-1))+0)='A';
-			*(*(((char**)last->data)+(neededRegs-1))+1)='B';
-			*(*(((char**)last->data)+(neededRegs-1))+2)='C';
-			*(*(((char**)last->data)+(neededRegs-1))+3)='D';
-			
-			*/
-		}
-			
+			allocatingRegs=neededRegs;
 		else
+			allocatingRegs=ldev->noReg;
+		for(i=0;i<allocatingRegs;i++)
 		{
-			last->data=kmalloc(sizeof(void*)*ldev->noReg,GFP_KERNEL);
-			if(!last->data)
+			*((last->data)+i)=kmalloc(sizeof(char)*ldev->regSize,GFP_KERNEL);
+			if(!(*((last->data)+i)))
 			{
-				#ifdef DEBUG
-				printk(KERN_ERR "Kmalloc allocation failed\n");
-				#endif
-				return 0;
-			}	
-			for(i=0;i<ldev->noReg;i++)
-			{
-				*((last->data)+i)=kmalloc(sizeof(char)*ldev->regSize,GFP_KERNEL);
-				if(!(*((last->data)+i)))
-				{
-				#ifdef DEBUG
-				printk(KERN_ERR "Kmalloc allocation failed\n");
-				#endif
-				return 0;
-				}
-			
-			
+			#ifdef DEBUG
+			printk(KERN_ERR "Kmalloc allocation failed\n");
+			#endif
+			return 0;
 			}
-
-			neededRegs=neededRegs-ldev->noReg;
+				
 		}
 
-
-		last=last->next;
-			
-		
-	
-	}	
+		neededRegs=neededRegs-allocatingRegs;
+	last=last->next;	
+	}
 		
 	
 
