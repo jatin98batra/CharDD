@@ -13,18 +13,26 @@ int openDev(struct inode * inodep, struct file * filp)
 	printk(KERN_INFO "%u\n",filp->f_flags);	
 
 	ldev=container_of( inodep->i_cdev , Dev , c_dev );
-	
 	printk(KERN_INFO "%u\n",filp->f_flags);	
 
 	//CROSSCHECK:
 #ifdef DEBUG
 	printk(KERN_INFO "ldev = %p",ldev);	
+	printk(KERN_INFO "ldev->ptr = %p",ldev->ptr);	
 #endif 
 
 	filp->private_data=(void*)ldev;// saving for further usage
+
 	if(((filp->f_flags) & O_ACCMODE) == O_WRONLY)
 	{
-		trimDev();
+		if(trimDev(ldev) < 0)
+		{
+#ifdef DEBUG
+			printk(KERN_ERR "ERROR:TrimDev Failed\n");
+#endif
+			return 0;
+		
+		}
 	
 	}
 		
