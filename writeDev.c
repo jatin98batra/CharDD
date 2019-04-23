@@ -22,6 +22,7 @@ ssize_t writeDev (struct file *fl , const char __user *buf, size_t size , loff_t
 
 	printk(KERN_INFO "The size we are passing to the createScull is:%ld\n",actualSize);
 	startQset=createScull(actualSize,ldev);//extern variable
+	ldev->ptr=startQset;
 	
 
 	
